@@ -46,7 +46,15 @@ class BTSolver:
         Return: true is assignment is consistent, false otherwise
     """
     def forwardChecking ( self ):
-        return False
+
+        for v in self.network.variables:
+            if v.isAssigned():
+                for n in self.network.getNeighborsOfVariable(v):
+                    if v.getAssignment() in n.getValues():
+                        n.removeValueFromDomain(v.getAssignment())
+                        if (n.domain.size() == 0):
+                            return False
+        return True
 
     """
         Part 2 TODO: Implement both of Norvig's Heuristics
@@ -94,7 +102,22 @@ class BTSolver:
         Return: The unassigned variable with the smallest domain
     """
     def getMRV ( self ):
-        return None
+
+        minimum = -1
+        result = None
+
+        for v in self.network.variables:
+            if not v.isAssigned():
+                count = v.domain.size()
+                if count < minimum or minimum == -1:
+                    minimum = count
+                    result = v
+
+        # if not enter for loop, means every value is assigned.
+        if minimum == -1:
+            return None
+        else:
+            return result
 
     """
         Part 2 TODO: Implement the Degree Heuristic
@@ -142,7 +165,24 @@ class BTSolver:
                 The LCV is first and the MCV is last
     """
     def getValuesLCVOrder ( self, v ):
-        return None
+
+        tuples = []
+        for c in v.getValues():
+            count = 0
+            # use count to weight each value
+            for n in self.network.getNeighborsOfVariable(v):
+                if c in n.getValues():
+                    count += 1
+            tuples.append((c, count))
+
+        # use count as key to sort
+        tuples = sorted(tuples, key=lambda tuple: tuple[1])
+        values = []
+        for t in tuples:
+            values.append(t[0])
+
+        return values
+        # return None
 
     """
          Optional TODO: Implement your own advanced Value Heuristic
