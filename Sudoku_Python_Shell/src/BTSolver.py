@@ -47,13 +47,23 @@ class BTSolver:
     """
     def forwardChecking ( self ):
 
+    # employ trail to backtrack FC.
+        # initialize
+        self.trail.placeTrailMarker()
+        # print("FC... length of trail stack",self.trail.size())
+    #implementation
         for v in self.network.variables:
             if v.isAssigned():
                 for n in self.network.getNeighborsOfVariable(v):
+                    self.trail.push(n)
                     if v.getAssignment() in n.getValues():
                         n.removeValueFromDomain(v.getAssignment())
                         if (n.domain.size() == 0):
+                            self.trail.undo()
+                            # print("FC... undo\n",)
                             return False
+
+        self.trail.trailMarker.pop()
         return True
 
     """

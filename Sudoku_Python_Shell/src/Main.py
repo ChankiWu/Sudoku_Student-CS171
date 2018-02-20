@@ -19,10 +19,10 @@ def main ( ):
     args = sys.argv
 
     # Important Variables
-    file   = "";
-    var_sh = "";
-    val_sh = "";
-    cc     = "";
+    file   = ""
+    var_sh = ""
+    val_sh = ""
+    cc     = ""
 
     for arg in [args[i] for i in range(1, len(args))]:
         if arg == "MRV":
@@ -49,9 +49,9 @@ def main ( ):
             cc     = "tournCC"
 
         else:
-            file = arg;
+            file = arg
 
-    trail = Trail.Trail();
+    trail = Trail.Trail()
 
     if file == "":
         sudokudata = SudokuBoard.SudokuBoard( 3, 3, 7 )
@@ -88,7 +88,7 @@ def main ( ):
             solver.solve()
 
             if solver.hassolution:
-                numSolutions += 1;
+                numSolutions += 1
 
         print ( "Solutions Found: " + str(numSolutions) )
         print ( "Assignments: " + str(trail.getPushCount()) )
